@@ -1,10 +1,29 @@
-<div class="container">
-  <h1>Привет!</h1>
-  <p>В этом приложении <strong>{{title}}</strong>
-    <br>мучаем <em>{{description}}</em></p>
-  <p [selectedFontSize]="'24px'"
-     [defaultFontSize]="'16px'"
-     appBold class="pBtn">Жиректива :)</p>
-</div>
-<button (click)="drawECharts()">Рисовать eCharts!</button>
-<div id="eChartsBox" style="width: 600px;height:400px;"></div>
+<section class="head">
+  <div class="head-container">
+    <h1>Привет!</h1>
+    <p>В этом приложении <strong>{{title}}</strong>
+      <br>мучаем <em>{{description}}</em></p>
+    <p appBold
+       [selectedFontSize]="'24px'"
+       [defaultFontSize]="'16px'"
+       class="pBtn">Жиректива :)</p>
+  </div>
+</section>
+<hr class="section-separator _border-top">
+
+<!-- Pie chart container -->
+<section class="pie-chart">
+  <div class="chart-container">
+    <div id="eChartsBox"></div>
+    <div class="pie-legend">
+      <div *ngFor="let item of data; let i = index"
+           (mouseover)="onSelectLegendItem(i)"
+           (mouseout)="onSelectLegendItem(i)"
+           (click)="onClickLegendItem(item)"
+           [attr.id]="'pieItem-' + i"
+           class="pie-legend__elem">
+        {{item.name}}: {{item.value}} стр.
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import eCharts from '../../node_modules/echarts';
-import eChartPie from '../../node_modules/echarts/lib/chart/pie';
+import * as eCharts from 'echarts';
 
 @Component({
   selector: 'app-root',
@@ -8,6 +7,8 @@ import eChartPie from '../../node_modules/echarts/lib/chart/pie';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
+  private myPieChar: any;
+  data: Array<object> = null;
   title: string;
   description: string;
 
@@ -17,23 +18,50 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.drawEchart();
-    console.log(eChartPie);
+    this.setData();
+    this.drawChart();
+    this.addEventHandlers();
   }
 
-  drawEchart() {
-    const chartEl = document.getElementById('eChartsBox');
+  setData() {
+    this.data = [
+      {name: 'Введение', value: 17},
+      {name: 'Первая глава', value: 36},
+      {name: 'Вторая глава', value: 58},
+      {name: 'Третья глава', value: 29},
+      {name: 'Заключение', value: 6},
+      {name: 'Заметки', value: 4}
+    ];
+  }
 
-    eCharts.init(chartEl).setOption({
+  drawChart() {
+    const el = document.getElementById('eChartsBox');
+    const options = {
       series: {
         type: 'pie',
-        data: [
-          {name: 'A', value: 1212},
-          {name: 'B', value: 2323},
-          {name: 'C', value: 1919}
-        ]
+        data: this.data
       }
+    };
+
+    this.myPieChar = eCharts.init(el);
+    this.myPieChar.setOption(options);
+  }
+
+  addEventHandlers() {
+    this.myPieChar.on('click', function(params) {
+      console.log(params.name);
     });
   }
 
+  onSelectLegendItem(index: number) {
+    this.myPieChar.dispatchAction({
+      type: 'pieToggleSelect',
+      seriesIndex: 0,
+      dataIndex: index
+    });
+  }
+
+  onClickLegendItem(item: object) {
+    console.dir(item);
+  }
 }
